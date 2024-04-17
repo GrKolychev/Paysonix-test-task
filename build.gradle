@@ -1,0 +1,53 @@
+plugins {
+	id 'java'
+	id 'checkstyle'
+	id 'pmd'
+	id 'org.springframework.boot' version "$springBootVersion"
+	id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+}
+
+group = 'com.gr.kolychev'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	google()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+pmd {
+	pmdVersion="$pmdVersion"
+	ruleSetFiles = files("$rootDir/config/pmd/pmd-ruleset.xml")
+	ruleSets = []
+	consoleOutput = true
+}
+
+checkstyle {
+	toolVersion = "$checkstyleVersion"
+	ignoreFailures = false
+	maxWarnings = 0
+}
+
+tasks.named('bootBuildImage') {
+	builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
