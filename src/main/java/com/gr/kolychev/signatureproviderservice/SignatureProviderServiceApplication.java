@@ -1,13 +1,13 @@
-package com.gr.kolychev.hashproviderservice;
+package com.gr.kolychev.signatureproviderservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HashProviderServiceApplication {
+public class SignatureProviderServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HashProviderServiceApplication.class, args);
+		SpringApplication.run(SignatureProviderServiceApplication.class, args);
 	}
 
 }
