@@ -51,10 +51,6 @@ checkstyle {
 	maxWarnings = 0
 }
 
-tasks.named('bootBuildImage') {
-	builder = 'paketobuildpacks/builder-jammy-base:latest'
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
