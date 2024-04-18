@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  signature-provider-servise:
+    build: ./
+    environment:
+      SECURITY_AUTHENTICATION_VALID_TOKEN: ${SECURITY_AUTHENTICATION_VALID_TOKEN_SIGNATURE_PROCESSOR}
+      SIGNATURE_PROCESSING_SECRET_KEY: ${SIGNATURE_PROCESSING_SECRET_KEY_SIGNATURE_PROCESSOR}
+    ports:
+      - "8080:8080"
+    networks:
+      - signature_network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  signature_network:
