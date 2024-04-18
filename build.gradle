@@ -33,6 +33,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	/* Validation */
 	implementation 'org.hibernate.validator:hibernate-validator'
+	/* OpenApi doc */
+	implementation "org.springdoc:springdoc-openapi-ui:$openApiVersion"
+	/* Actuator */
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	/* Testing */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mockito:mockito-inline'

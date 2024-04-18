@@ -6,8 +6,13 @@ import com.gr.kolychev.signatureproviderservice.model.Signature;
 import com.gr.kolychev.signatureproviderservice.model.GenericResponse;
 import com.gr.kolychev.signatureproviderservice.service.SignatureService;
 import com.gr.kolychev.signatureproviderservice.validation.annotation.ValidToken;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,14 +33,25 @@ public class SignatureController {
 
     private SignatureService hmacSha256SignatureService;
 
+    @Operation(summary = "Creates signature based on provided data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully created signature",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "403", description = "Token missing or invalid",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @LogExecutionTime
     @PostMapping("/api/v1/signatures/{operationId}")
     public ResponseEntity<GenericResponse<List<Signature>>> createSignature(@PathVariable String operationId,
                                                                             @NotEmpty(message =
-                                                                                 "Missing request parameters")
-                                                                         @RequestParam Map<String, String> params,
+                                                                                    "Missing request parameters")
+                                                                            @RequestParam Map<String, String> params,
                                                                             @ValidToken
-                                                                         @RequestHeader("Token") String token) {
+                                                                            @RequestHeader("Token") String token) {
         log.info("Incoming getSignature request with operationId: {}", operationId);
         var signature = hmacSha256SignatureService.createSignature(operationId, params);
         var signatureResponse = GenericResponse.<List<Signature>>builder()
