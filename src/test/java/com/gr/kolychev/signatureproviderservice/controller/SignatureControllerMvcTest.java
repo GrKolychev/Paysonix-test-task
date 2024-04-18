@@ -62,15 +62,16 @@ class SignatureControllerMvcTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private SignatureService signatureService;
+    private SignatureService hmacSha256SignatureService;
 
     @Value("${security.authentication.valid-token}")
     private String token;
 
     @Test
-    void testGetSignatureShouldReturnOkAndProperContent() throws Exception {
+    void testCreateSignatureShouldReturnOkAndProperContent() throws Exception {
         //given
-        when(signatureService.getSignature(OPERATION_ID, PARAMS)).thenReturn(new Signature(SIGNATURE_STRING));
+        when(hmacSha256SignatureService.createSignature(OPERATION_ID, PARAMS))
+                .thenReturn(new Signature(SIGNATURE_STRING));
         //when-then
         mockMvc.perform(post(GET_SIGNATURE_URL + OPERATION_ID)
                         .param(PARAM_1, PARAM_1_VALUE)
@@ -81,9 +82,10 @@ class SignatureControllerMvcTest {
     }
 
     @Test
-    void testGetSignatureShouldReturn403WhenMissingToken() throws Exception {
+    void testCreateSignatureShouldReturn403WhenMissingToken() throws Exception {
         //given
-        when(signatureService.getSignature(OPERATION_ID, PARAMS)).thenReturn(new Signature(SIGNATURE_STRING));
+        when(hmacSha256SignatureService.createSignature(OPERATION_ID, PARAMS))
+                .thenReturn(new Signature(SIGNATURE_STRING));
         //when-then
         mockMvc.perform(post(GET_SIGNATURE_URL + OPERATION_ID)
                         .param(PARAM_1, PARAM_1_VALUE)
@@ -93,9 +95,10 @@ class SignatureControllerMvcTest {
     }
 
     @Test
-    void testGetSignatureShouldReturn403WhenInvalidToken() throws Exception {
+    void testCreateSignatureShouldReturn403WhenInvalidToken() throws Exception {
         //given
-        when(signatureService.getSignature(OPERATION_ID, PARAMS)).thenReturn(new Signature(SIGNATURE_STRING));
+        when(hmacSha256SignatureService.createSignature(OPERATION_ID, PARAMS))
+                .thenReturn(new Signature(SIGNATURE_STRING));
         //when-then
         mockMvc.perform(post(GET_SIGNATURE_URL + OPERATION_ID)
                         .param(PARAM_1, PARAM_1_VALUE)
@@ -106,9 +109,10 @@ class SignatureControllerMvcTest {
     }
 
     @Test
-    void testGetSignatureShouldReturn400WhenMissingParameters() throws Exception {
+    void testCreateSignatureShouldReturn400WhenMissingParameters() throws Exception {
         //given
-        when(signatureService.getSignature(OPERATION_ID, PARAMS)).thenReturn(new Signature(SIGNATURE_STRING));
+        when(hmacSha256SignatureService.createSignature(OPERATION_ID, PARAMS))
+                .thenReturn(new Signature(SIGNATURE_STRING));
         //when-then
         mockMvc.perform(post(GET_SIGNATURE_URL + OPERATION_ID)
                         .header(TOKEN_HEADER, token)

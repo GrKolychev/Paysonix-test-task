@@ -2,6 +2,7 @@ package com.gr.kolychev.signatureproviderservice.service;
 
 import com.gr.kolychev.signatureproviderservice.model.Signature;
 import com.gr.kolychev.signatureproviderservice.processor.SignatureProcessor;
+import com.gr.kolychev.signatureproviderservice.service.impl.HmacSha256SignatureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,28 +22,29 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class SignatureServiceIntegrationTest {
+class HmacSha256SignatureServiceIntegrationTest {
 
     @Mock
-    private SignatureProcessor processor;
+    private SignatureProcessor hmacSha256SignatureProcessor;
 
-    private SignatureService service;
+    private SignatureService hmacSha256SignatureService;
 
     @BeforeEach
     void setUp() {
-        service = new SignatureService(processor);
+        hmacSha256SignatureService = new HmacSha256SignatureService(hmacSha256SignatureProcessor);
     }
 
     @Test
-    void testGetSignature() {
+    void testCreateSignature() {
         //given
-        when(processor.createSignature(OPERATION_ID, DATA)).thenReturn(new Signature(SIGNATURE_STRING));
+        when(hmacSha256SignatureProcessor.createSignature(OPERATION_ID, DATA))
+                .thenReturn(new Signature(SIGNATURE_STRING));
         //when
-        var resultSignature = service.getSignature(OPERATION_ID, PARAMS_2);
+        var resultSignature = hmacSha256SignatureService.createSignature(OPERATION_ID, PARAMS_2);
         //then
         assertNotNull(resultSignature);
         assertEquals(SIGNATURE, resultSignature);
-        verify(processor, times(1)).createSignature(OPERATION_ID, DATA);
-        verifyNoMoreInteractions(processor);
+        verify(hmacSha256SignatureProcessor, times(1)).createSignature(OPERATION_ID, DATA);
+        verifyNoMoreInteractions(hmacSha256SignatureProcessor);
     }
 }

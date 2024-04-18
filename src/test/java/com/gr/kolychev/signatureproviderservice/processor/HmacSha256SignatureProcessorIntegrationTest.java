@@ -1,5 +1,6 @@
 package com.gr.kolychev.signatureproviderservice.processor;
 
+import com.gr.kolychev.signatureproviderservice.processor.impl.HmacSha256SignatureProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class SignatureProcessorIntegrationTest {
+class HmacSha256SignatureProcessorIntegrationTest {
 
-    private SignatureProcessor processor;
+    private SignatureProcessor hmacSha256SignatureProcessor;
 
     @BeforeEach
     void setUp() {
-        processor = new SignatureProcessor();
+        hmacSha256SignatureProcessor = new HmacSha256SignatureProcessor();
     }
 
     @Test
@@ -35,9 +36,9 @@ class SignatureProcessorIntegrationTest {
             //given
             hmacUtilsMocked.when(() -> HmacUtils.calculateHMAC(ALGORITHM, DATA, SECRET_KEY))
                     .thenReturn(SIGNATURE_STRING);
-            ReflectionTestUtils.setField(processor, "secretKey", SECRET_KEY);
+            ReflectionTestUtils.setField(hmacSha256SignatureProcessor, "secretKey", SECRET_KEY);
             //when
-            var result = processor.createSignature(OPERATION_ID, DATA);
+            var result = hmacSha256SignatureProcessor.createSignature(OPERATION_ID, DATA);
             //then
             assertNotNull(result);
             assertEquals(SIGNATURE, result);
