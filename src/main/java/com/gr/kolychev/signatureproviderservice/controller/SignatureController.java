@@ -26,18 +26,18 @@ import java.util.Map;
 @Validated
 public class SignatureController {
 
-    private SignatureService signatureService;
+    private SignatureService hmacSha256SignatureService;
 
     @LogExecutionTime
     @PostMapping("/api/v1/signatures/{operationId}")
-    public ResponseEntity<GenericResponse<List<Signature>>> getSignature(@PathVariable String operationId,
-                                                                         @NotEmpty(message =
+    public ResponseEntity<GenericResponse<List<Signature>>> createSignature(@PathVariable String operationId,
+                                                                            @NotEmpty(message =
                                                                                  "Missing request parameters")
                                                                          @RequestParam Map<String, String> params,
-                                                                         @ValidToken
+                                                                            @ValidToken
                                                                          @RequestHeader("Token") String token) {
         log.info("Incoming getSignature request with operationId: {}", operationId);
-        var signature = signatureService.getSignature(operationId, params);
+        var signature = hmacSha256SignatureService.createSignature(operationId, params);
         var signatureResponse = GenericResponse.<List<Signature>>builder()
                 .status(RequestStatus.SUCCESS)
                 .result(List.of(signature))

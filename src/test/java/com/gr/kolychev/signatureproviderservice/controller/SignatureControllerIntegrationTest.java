@@ -28,32 +28,33 @@ import static org.mockito.Mockito.when;
 class SignatureControllerIntegrationTest {
 
     @Mock
-    private SignatureService service;
+    private SignatureService hmacSha256SignatureService;
 
-    private SignatureController controller;
+    private SignatureController signatureController;
 
     @BeforeEach
     void setUp() {
-        controller = new SignatureController(service);
+        signatureController = new SignatureController(hmacSha256SignatureService);
     }
 
     @Test
-    void testGetSignature() {
+    void testCreateSignature() {
         //given
         var expectedResult = GenericResponse.<List<Signature>>builder()
                 .status(RequestStatus.SUCCESS)
                 .result(List.of(new Signature(SIGNATURE_STRING)))
                 .build();
 
-        when(service.getSignature(OPERATION_ID, PARAMS)).thenReturn(new Signature(SIGNATURE_STRING));
+        when(hmacSha256SignatureService.createSignature(OPERATION_ID, PARAMS))
+                .thenReturn(new Signature(SIGNATURE_STRING));
         //when
-        var response = controller.getSignature(OPERATION_ID, PARAMS, TOKEN_HEADER);
+        var response = signatureController.createSignature(OPERATION_ID, PARAMS, TOKEN_HEADER);
         //then
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(expectedResult, response.getBody());
-        verify(service, times(1)).getSignature(OPERATION_ID, PARAMS);
-        verifyNoMoreInteractions(service);
+        verify(hmacSha256SignatureService, times(1)).createSignature(OPERATION_ID, PARAMS);
+        verifyNoMoreInteractions(hmacSha256SignatureService);
     }
 }
