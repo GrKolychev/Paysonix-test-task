@@ -38,24 +38,16 @@ class SignatureControllerMvcTest {
                 ]
             }
             """;
-    private static final String EXPECTED_MISSING_TOKEN_CONTENT = """
-            {
-                "status": "ERROR",
-                "result": "Missing Token header in the request"
-            }
-            """;
-    private static final String EXPECTED_INVALID_TOKEN_CONTENT = """
+    private static final String EXPECTED_INVALID_OR_MISSING_TOKEN_CONTENT = """
             {
                 "status": "FAILED",
-                "result": "Provided token is invalid."
+                "result": "Invalid or missing Token header"
             }
             """;
     private static final String EXPECTED_MISSING_PARAMETERS_CONTENT = """
             {
                 "status": "ERROR",
-                "result": [
-                    "Missing request parameters"
-                ]
+                "result": "Missing request parameters"
             }
             """;
 
@@ -91,7 +83,7 @@ class SignatureControllerMvcTest {
                         .param(PARAM_1, PARAM_1_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
-                .andExpect(content().json(EXPECTED_MISSING_TOKEN_CONTENT));
+                .andExpect(content().json(EXPECTED_INVALID_OR_MISSING_TOKEN_CONTENT));
     }
 
     @Test
@@ -105,7 +97,7 @@ class SignatureControllerMvcTest {
                         .header(TOKEN_HEADER, INVALID_HEADER_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
-                .andExpect(content().json(EXPECTED_INVALID_TOKEN_CONTENT));
+                .andExpect(content().json(EXPECTED_INVALID_OR_MISSING_TOKEN_CONTENT));
     }
 
     @Test

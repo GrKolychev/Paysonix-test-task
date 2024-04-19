@@ -33,6 +33,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	/* Validation */
 	implementation 'org.hibernate.validator:hibernate-validator'
+	/* Jackson */
+	implementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+	implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 	/* OpenApi doc */
 	implementation "org.springdoc:springdoc-openapi-ui:$openApiVersion"
 	/* Actuator */
